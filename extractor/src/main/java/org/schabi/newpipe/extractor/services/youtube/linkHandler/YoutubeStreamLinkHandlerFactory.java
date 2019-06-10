@@ -2,6 +2,7 @@ package org.schabi.newpipe.extractor.services.youtube.linkHandler;
 
 import org.schabi.newpipe.extractor.exceptions.FoundAdException;
 import org.schabi.newpipe.extractor.exceptions.ParsingException;
+import org.schabi.newpipe.extractor.linkhandler.LinkHandler;
 import org.schabi.newpipe.extractor.linkhandler.LinkHandlerFactory;
 import org.schabi.newpipe.extractor.utils.Utils;
 
@@ -9,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.text.ParseException;
 
 /*
  * Created by Christian Schabesberger on 02.02.16.
@@ -57,6 +59,11 @@ public class YoutubeStreamLinkHandlerFactory extends LinkHandlerFactory {
     @Override
     public String getShortUrl(String id) {
         return "youtu.be/" + id;
+    }
+
+    @Override
+    public String shortenUrl(String url) throws ParsingException {
+        return getShortUrl(getId(url));
     }
 
     @Override

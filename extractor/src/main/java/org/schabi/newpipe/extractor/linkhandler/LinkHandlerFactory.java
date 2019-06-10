@@ -3,6 +3,8 @@ package org.schabi.newpipe.extractor.linkhandler;
 import org.schabi.newpipe.extractor.exceptions.FoundAdException;
 import org.schabi.newpipe.extractor.exceptions.ParsingException;
 
+import java.text.ParseException;
+
 /*
  * Created by Christian Schabesberger on 26.07.16.
  *
@@ -33,6 +35,9 @@ public abstract class LinkHandlerFactory {
     public abstract String getUrl(String id) throws ParsingException;
     public String getShortUrl(String id) throws ParsingException {
         return getUrl(id);
+    }
+    public String shortenUrl(String url) throws ParsingException {
+        return url;
     }
     public abstract boolean onAcceptUrl(final String url) throws ParsingException;
 
