@@ -55,6 +55,11 @@ public class YoutubeStreamLinkHandlerFactory extends LinkHandlerFactory {
     }
 
     @Override
+    public String getShortUrl(String id) {
+        return "youtu.be/" + id;
+    }
+
+    @Override
     public String getId(String urlString) throws ParsingException, IllegalArgumentException {
         try {
             URI uri = new URI(urlString);

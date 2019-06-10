@@ -31,6 +31,9 @@ public abstract class LinkHandlerFactory {
 
     public abstract String getId(String url) throws ParsingException;
     public abstract String getUrl(String id) throws ParsingException;
+    public String getShortUrl(String id) throws ParsingException {
+        return getUrl(id);
+    }
     public abstract boolean onAcceptUrl(final String url) throws ParsingException;
 
     ///////////////////////////////////
