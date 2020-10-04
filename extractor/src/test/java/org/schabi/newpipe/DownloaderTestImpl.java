@@ -92,8 +92,12 @@ public final class DownloaderTestImpl extends Downloader {
     public Response execute(@Nonnull final Request request)
             throws IOException, ReCaptchaException {
         if (requestMocks.containsKey(request.url())) {
-            new Exception("Mocking request to " + request.url()).printStackTrace();
+            new Exception("DownloaderTestImpl INFO: Mocking request to " + request.url())
+                    .printStackTrace();
             return requestMocks.get(request.url());
+        } else {
+            new Exception("DownloaderTestImpl INFO: Making request to " + request.url())
+                    .printStackTrace();
         }
 
         final String httpMethod = request.httpMethod();
