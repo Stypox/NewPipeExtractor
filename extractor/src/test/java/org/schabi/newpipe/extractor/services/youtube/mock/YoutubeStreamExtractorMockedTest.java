@@ -1,4 +1,4 @@
-package org.schabi.newpipe.extractor.services.youtube.stream;
+package org.schabi.newpipe.extractor.services.youtube.mock;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -17,7 +17,7 @@ public class YoutubeStreamExtractorMockedTest {
     @BeforeClass
     public static void setUp() throws Exception {
         final DownloaderTestImpl downloader = DownloaderTestImpl.getInstance();
-        downloader.mockRequestsWithHar("youtube_stream_har_3753.har");
+        downloader.mockRequestsWithHar("youtube_stream_3753.har");
         NewPipe.init(downloader);
         extractor = (YoutubeStreamExtractor) YouTube
                 .getStreamExtractor("https://m.youtube.com/watch?v=FXxuFk2ZO8Y");
