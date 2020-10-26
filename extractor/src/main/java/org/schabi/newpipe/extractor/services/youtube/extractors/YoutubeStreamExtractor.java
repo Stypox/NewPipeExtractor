@@ -663,28 +663,14 @@ public class YoutubeStreamExtractor extends StreamExtractor {
 
         } else {
             ageLimit = NO_AGE_LIMIT;
-            JsonObject playerConfig;
-
-            // sometimes at random YouTube does not provide the player config,
-            // so just retry the same request three times
-            int attempts = 2;
-            while (true) {
-                playerConfig = initialAjaxJson.getObject(2).getObject("player", null);
-                if (playerConfig != null) {
-                    break;
-                }
-
-                if (attempts <= 0) {
-                    throw new ParsingException(
-                            "YouTube did not provide player config even after three attempts");
-                }
-                initialAjaxJson = getJsonResponse(url, getExtractorLocalization());
-                --attempts;
-            }
+            final JsonObject playerConfig =
+                    initialAjaxJson.getObject(2).getObject("player", null);
             initialData = initialAjaxJson.getObject(3).getObject("response");
 
-            playerArgs = getPlayerArgs(playerConfig);
-            playerUrl = getPlayerUrl(playerConfig);
+            if (playerConfig != null) {
+                playerArgs = getPlayerArgs(playerConfig);
+            }
+            playerUrl = "/s/player/4a1799bd/player_ias.vflset/en_GB/base.js";
         }
 
         playerResponse = getPlayerResponse();
@@ -737,6 +723,11 @@ public class YoutubeStreamExtractor extends StreamExtractor {
             } else {
                 playerResponseStr = videoInfoPage.get("player_response");
             }
+
+            if (playerResponseStr == null) {
+                return initialAjaxJson.getObject(2).getObject("playerResponse");
+            }
+
             return JsonParser.object().from(playerResponseStr);
         } catch (Exception e) {
             throw new ParsingException("Could not parse yt player response", e);
