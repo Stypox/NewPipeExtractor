@@ -1,9 +1,42 @@
+plugins {
+    id 'checkstyle'
+}
+
 test {
 //  Pass on downloader type to tests for different CI jobs. See DownloaderFactory.java and ci.yml
     if (System.properties.containsKey('downloader')) {
         systemProperty('downloader', System.getProperty('downloader'))
     }
     useJUnitPlatform()
+}
+
+configurations {
+    checkstyle
+}
+
+checkstyle {
+    getConfigDirectory().set(rootProject.file("."))
+    ignoreFailures false
+    showViolations true
+    toolVersion = checkstyleVersion
+}
+
+task runCheckstyle(type: Checkstyle) {
+    source 'src'
+    include 'main/**/*.java'
+
+    classpath = configurations.checkstyle
+
+    showViolations true
+
+    reports {
+        xml.getRequired().set(true)
+        html.getRequired().set(true)
+    }
+}
+
+afterEvaluate {
+    test.dependsOn runCheckstyle
 }
 
 dependencies {
@@ -14,6 +47,8 @@ dependencies {
     implementation 'org.mozilla:rhino:1.7.13'
     implementation "com.github.spotbugs:spotbugs-annotations:$spotbugsVersion"
     implementation 'org.nibor.autolink:autolink:0.10.0'
+
+    checkstyle "com.puppycrawl.tools:checkstyle:$checkstyleVersion"
 
     testImplementation platform("org.junit:junit-bom:$junitVersion")
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
