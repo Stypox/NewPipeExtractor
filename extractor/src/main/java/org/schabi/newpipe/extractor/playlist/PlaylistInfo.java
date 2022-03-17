@@ -15,25 +15,29 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlaylistInfo extends ListInfo<StreamInfoItem> {
+public final class PlaylistInfo extends ListInfo<StreamInfoItem> {
 
-    private PlaylistInfo(int serviceId, ListLinkHandler linkHandler, String name) throws ParsingException {
+    @SuppressWarnings("RedundantThrows")
+    private PlaylistInfo(final int serviceId, final ListLinkHandler linkHandler, final String name)
+            throws ParsingException {
         super(serviceId, linkHandler, name);
     }
 
-    public static PlaylistInfo getInfo(String url) throws IOException, ExtractionException {
+    public static PlaylistInfo getInfo(final String url) throws IOException, ExtractionException {
         return getInfo(NewPipe.getServiceByUrl(url), url);
     }
 
-    public static PlaylistInfo getInfo(StreamingService service, String url) throws IOException, ExtractionException {
-        PlaylistExtractor extractor = service.getPlaylistExtractor(url);
+    public static PlaylistInfo getInfo(final StreamingService service, final String url)
+            throws IOException, ExtractionException {
+        final PlaylistExtractor extractor = service.getPlaylistExtractor(url);
         extractor.fetchPage();
         return getInfo(extractor);
     }
 
-    public static InfoItemsPage<StreamInfoItem> getMoreItems(StreamingService service,
-                                                             String url,
-                                                             Page page) throws IOException, ExtractionException {
+    public static InfoItemsPage<StreamInfoItem> getMoreItems(final StreamingService service,
+                                                             final String url,
+                                                             final Page page)
+            throws IOException, ExtractionException {
         return service.getPlaylistExtractor(url).getPage(page);
     }
 
@@ -42,7 +46,8 @@ public class PlaylistInfo extends ListInfo<StreamInfoItem> {
      *
      * @param extractor an extractor where fetchPage() was already got called on.
      */
-    public static PlaylistInfo getInfo(PlaylistExtractor extractor) throws ExtractionException {
+    public static PlaylistInfo getInfo(final PlaylistExtractor extractor)
+            throws ExtractionException {
 
         final PlaylistInfo info = new PlaylistInfo(
                 extractor.getServiceId(),
@@ -50,68 +55,70 @@ public class PlaylistInfo extends ListInfo<StreamInfoItem> {
                 extractor.getName());
         // collect uploader extraction failures until we are sure this is not
         // just a playlist without an uploader
-        List<Throwable> uploaderParsingErrors = new ArrayList<Throwable>(3);
+        final List<Throwable> uploaderParsingErrors = new ArrayList<>();
 
         try {
             info.setOriginalUrl(extractor.getOriginalUrl());
-        } catch (Exception e) {
+        } catch (final Exception e) {
             info.addError(e);
         }
         try {
             info.setStreamCount(extractor.getStreamCount());
-        } catch (Exception e) {
+        } catch (final Exception e) {
             info.addError(e);
         }
         try {
             info.setThumbnailUrl(extractor.getThumbnailUrl());
-        } catch (Exception e) {
+        } catch (final Exception e) {
             info.addError(e);
         }
         try {
             info.setUploaderUrl(extractor.getUploaderUrl());
-        } catch (Exception e) {
+        } catch (final Exception e) {
             info.setUploaderUrl("");
             uploaderParsingErrors.add(e);
         }
         try {
             info.setUploaderName(extractor.getUploaderName());
-        } catch (Exception e) {
+        } catch (final Exception e) {
             info.setUploaderName("");
             uploaderParsingErrors.add(e);
         }
         try {
             info.setUploaderAvatarUrl(extractor.getUploaderAvatarUrl());
-        } catch (Exception e) {
+        } catch (final Exception e) {
             info.setUploaderAvatarUrl("");
             uploaderParsingErrors.add(e);
         }
         try {
             info.setSubChannelUrl(extractor.getSubChannelUrl());
-        } catch (Exception e) {
+        } catch (final Exception e) {
             uploaderParsingErrors.add(e);
         }
         try {
             info.setSubChannelName(extractor.getSubChannelName());
-        } catch (Exception e) {
+        } catch (final Exception e) {
             uploaderParsingErrors.add(e);
         }
         try {
             info.setSubChannelAvatarUrl(extractor.getSubChannelAvatarUrl());
-        } catch (Exception e) {
+        } catch (final Exception e) {
             uploaderParsingErrors.add(e);
         }
         try {
             info.setBannerUrl(extractor.getBannerUrl());
-        } catch (Exception e) {
+        } catch (final Exception e) {
             info.addError(e);
         }
-        // do not fail if everything but the uploader infos could be collected
-        if (!uploaderParsingErrors.isEmpty() &&
-                (!info.getErrors().isEmpty() || uploaderParsingErrors.size() < 3)) {
+
+        // do not fail if everything but the uploader infos could be collected (TODO better comment)
+        if (!uploaderParsingErrors.isEmpty()
+                && (!info.getErrors().isEmpty() || uploaderParsingErrors.size() < 3)) {
             info.addAllErrors(uploaderParsingErrors);
         }
 
-        final InfoItemsPage<StreamInfoItem> itemsPage = ExtractorHelper.getItemsPageOrLogError(info, extractor);
+        final InfoItemsPage<StreamInfoItem> itemsPage
+                = ExtractorHelper.getItemsPageOrLogError(info, extractor);
         info.setRelatedItems(itemsPage.getItems());
         info.setNextPage(itemsPage.getNextPage());
 
@@ -132,7 +139,7 @@ public class PlaylistInfo extends ListInfo<StreamInfoItem> {
         return thumbnailUrl;
     }
 
-    public void setThumbnailUrl(String thumbnailUrl) {
+    public void setThumbnailUrl(final String thumbnailUrl) {
         this.thumbnailUrl = thumbnailUrl;
     }
 
@@ -140,7 +147,7 @@ public class PlaylistInfo extends ListInfo<StreamInfoItem> {
         return bannerUrl;
     }
 
-    public void setBannerUrl(String bannerUrl) {
+    public void setBannerUrl(final String bannerUrl) {
         this.bannerUrl = bannerUrl;
     }
 
@@ -148,7 +155,7 @@ public class PlaylistInfo extends ListInfo<StreamInfoItem> {
         return uploaderUrl;
     }
 
-    public void setUploaderUrl(String uploaderUrl) {
+    public void setUploaderUrl(final String uploaderUrl) {
         this.uploaderUrl = uploaderUrl;
     }
 
@@ -156,7 +163,7 @@ public class PlaylistInfo extends ListInfo<StreamInfoItem> {
         return uploaderName;
     }
 
-    public void setUploaderName(String uploaderName) {
+    public void setUploaderName(final String uploaderName) {
         this.uploaderName = uploaderName;
     }
 
@@ -164,7 +171,7 @@ public class PlaylistInfo extends ListInfo<StreamInfoItem> {
         return uploaderAvatarUrl;
     }
 
-    public void setUploaderAvatarUrl(String uploaderAvatarUrl) {
+    public void setUploaderAvatarUrl(final String uploaderAvatarUrl) {
         this.uploaderAvatarUrl = uploaderAvatarUrl;
     }
 
@@ -172,7 +179,7 @@ public class PlaylistInfo extends ListInfo<StreamInfoItem> {
         return subChannelUrl;
     }
 
-    public void setSubChannelUrl(String subChannelUrl) {
+    public void setSubChannelUrl(final String subChannelUrl) {
         this.subChannelUrl = subChannelUrl;
     }
 
@@ -180,7 +187,7 @@ public class PlaylistInfo extends ListInfo<StreamInfoItem> {
         return subChannelName;
     }
 
-    public void setSubChannelName(String subChannelName) {
+    public void setSubChannelName(final String subChannelName) {
         this.subChannelName = subChannelName;
     }
 
@@ -188,7 +195,7 @@ public class PlaylistInfo extends ListInfo<StreamInfoItem> {
         return subChannelAvatarUrl;
     }
 
-    public void setSubChannelAvatarUrl(String subChannelAvatarUrl) {
+    public void setSubChannelAvatarUrl(final String subChannelAvatarUrl) {
         this.subChannelAvatarUrl = subChannelAvatarUrl;
     }
 
@@ -196,7 +203,7 @@ public class PlaylistInfo extends ListInfo<StreamInfoItem> {
         return streamCount;
     }
 
-    public void setStreamCount(long streamCount) {
+    public void setStreamCount(final long streamCount) {
         this.streamCount = streamCount;
     }
 }

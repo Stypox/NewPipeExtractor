@@ -10,7 +10,7 @@ public class PlaylistInfoItem extends InfoItem {
      */
     private long streamCount = 0;
 
-    public PlaylistInfoItem(int serviceId, String url, String name) {
+    public PlaylistInfoItem(final int serviceId, final String url, final String name) {
         super(InfoType.PLAYLIST, serviceId, url, name);
     }
 
@@ -18,15 +18,15 @@ public class PlaylistInfoItem extends InfoItem {
         return uploaderName;
     }
 
-    public void setUploaderName(String uploader_name) {
-        this.uploaderName = uploader_name;
+    public void setUploaderName(final String uploaderName) {
+        this.uploaderName = uploaderName;
     }
 
     public long getStreamCount() {
         return streamCount;
     }
 
-    public void setStreamCount(long stream_count) {
-        this.streamCount = stream_count;
+    public void setStreamCount(final long streamCount) {
+        this.streamCount = streamCount;
     }
 }

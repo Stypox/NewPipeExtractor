@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 
 public abstract class PlaylistExtractor extends ListExtractor<StreamInfoItem> {
 
-    public PlaylistExtractor(StreamingService service, ListLinkHandler linkHandler) {
+    public PlaylistExtractor(final StreamingService service, final ListLinkHandler linkHandler) {
         super(service, linkHandler);
     }
 
