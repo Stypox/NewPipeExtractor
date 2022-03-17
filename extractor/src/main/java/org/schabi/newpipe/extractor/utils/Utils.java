@@ -15,8 +15,8 @@ public class Utils {
     public static final String HTTPS = "https://";
     public static final String UTF_8 = "UTF-8";
     public static final String EMPTY_STRING = "";
-    private static final Pattern M_PATTERN = Pattern.compile("(https?)?:\\/\\/m\\.");
-    private static final Pattern WWW_PATTERN = Pattern.compile("(https?)?:\\/\\/www\\.");
+    private static final Pattern M_PATTERN = Pattern.compile("(https?)?://m\\.");
+    private static final Pattern WWW_PATTERN = Pattern.compile("(https?)?://www\\.");
 
     private Utils() {
         // no instance
