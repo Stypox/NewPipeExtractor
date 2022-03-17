@@ -93,11 +93,10 @@ public class BandcampPlaylistExtractor extends PlaylistExtractor {
 
     @Override
     public String getUploaderAvatarUrl() {
-        try {
-            return document.getElementsByClass("band-photo").first().attr("src");
-        } catch (NullPointerException e) {
-            return "";
-        }
+        return document.getElementsByClass("band-photo").stream()
+                .map(element -> element.attr("src"))
+                .findFirst()
+                .orElse("");
     }
 
     @Override

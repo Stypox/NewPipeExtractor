@@ -7,6 +7,7 @@ import com.grack.nanojson.JsonParser;
 import com.grack.nanojson.JsonParserException;
 import com.grack.nanojson.JsonWriter;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
 import org.schabi.newpipe.extractor.NewPipe;
 import org.schabi.newpipe.extractor.exceptions.ParsingException;
 import org.schabi.newpipe.extractor.exceptions.ReCaptchaException;
@@ -134,5 +135,15 @@ public final class BandcampExtractorHelper {
         } catch (final DateTimeException e) {
             throw new ParsingException("Could not parse date '" + textDate + "'", e);
         }
+    }
+
+    @Nullable
+    public static String getThumbnailUrlFromSearchResult(final Element searchResult) {
+        return searchResult.getElementsByClass("art").stream()
+                .flatMap(element -> element.getElementsByTag("img").stream())
+                .map(element -> element.attr("src"))
+                .filter(string -> !string.isEmpty())
+                .findFirst()
+                .orElse(null);
     }
 }

@@ -2,6 +2,8 @@
 
 package org.schabi.newpipe.extractor.services.bandcamp.extractors;
 
+import static org.schabi.newpipe.extractor.utils.Utils.replaceHttpWithHttps;
+
 import com.grack.nanojson.JsonArray;
 import com.grack.nanojson.JsonObject;
 import org.jsoup.Jsoup;
@@ -48,20 +50,18 @@ public class BandcampChannelExtractor extends ChannelExtractor {
          */
         try {
             final String html = getDownloader()
-                            .get(channelInfo.getString("bandcamp_url").replace("http://", "https://"))
+                            .get(replaceHttpWithHttps(channelInfo.getString("bandcamp_url")))
                             .responseBody();
 
-            return Jsoup.parse(html)
-                    .getElementById("customHeader")
-                    .getElementsByTag("img")
-                    .first()
-                    .attr("src");
+            return Stream.of(Jsoup.parse(html).getElementById("customHeader"))
+                    .filter(Objects::nonNull)
+                    .flatMap(element -> element.getElementsByTag("img").stream())
+                    .map(element -> element.attr("src"))
+                    .findFirst()
+                    .orElse(""); // no banner available
 
         } catch (final IOException | ReCaptchaException e) {
             throw new ParsingException("Could not download artist web site", e);
-        } catch (final NullPointerException e) {
-            // No banner available
-            return "";
         }
     }
 
