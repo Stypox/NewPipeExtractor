@@ -1,5 +1,17 @@
 package org.schabi.newpipe.extractor.services.youtube.extractors;
 
+import static org.schabi.newpipe.extractor.services.youtube.YoutubeParsingHelper.YOUTUBEI_V1_URL;
+import static org.schabi.newpipe.extractor.services.youtube.YoutubeParsingHelper.addClientInfoHeaders;
+import static org.schabi.newpipe.extractor.services.youtube.YoutubeParsingHelper.fixThumbnailUrl;
+import static org.schabi.newpipe.extractor.services.youtube.YoutubeParsingHelper.getJsonPostResponse;
+import static org.schabi.newpipe.extractor.services.youtube.YoutubeParsingHelper.getKey;
+import static org.schabi.newpipe.extractor.services.youtube.YoutubeParsingHelper.getTextFromObject;
+import static org.schabi.newpipe.extractor.services.youtube.YoutubeParsingHelper.getUrlFromNavigationEndpoint;
+import static org.schabi.newpipe.extractor.services.youtube.YoutubeParsingHelper.getValidJsonResponseBody;
+import static org.schabi.newpipe.extractor.services.youtube.YoutubeParsingHelper.prepareDesktopJsonBuilder;
+import static org.schabi.newpipe.extractor.utils.Utils.UTF_8;
+import static org.schabi.newpipe.extractor.utils.Utils.isNullOrEmpty;
+
 import com.grack.nanojson.JsonArray;
 import com.grack.nanojson.JsonObject;
 import com.grack.nanojson.JsonWriter;
@@ -27,16 +39,12 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
-import static org.schabi.newpipe.extractor.services.youtube.YoutubeParsingHelper.*;
-import static org.schabi.newpipe.extractor.utils.Utils.UTF_8;
-import static org.schabi.newpipe.extractor.utils.Utils.isNullOrEmpty;
-
-@SuppressWarnings("WeakerAccess")
 public class YoutubePlaylistExtractor extends PlaylistExtractor {
     private JsonObject initialData;
     private JsonObject playlistInfo;
 
-    public YoutubePlaylistExtractor(StreamingService service, ListLinkHandler linkHandler) {
+    public YoutubePlaylistExtractor(final StreamingService service,
+                                    final ListLinkHandler linkHandler) {
         super(service, linkHandler);
     }
 
@@ -90,21 +98,27 @@ public class YoutubePlaylistExtractor extends PlaylistExtractor {
     @Override
     public String getName() throws ParsingException {
         final String name = getTextFromObject(playlistInfo.getObject("title"));
-        if (!isNullOrEmpty(name)) return name;
+        if (!isNullOrEmpty(name)) {
+            return name;
+        }
 
-        return initialData.getObject("microformat").getObject("microformatDataRenderer").getString("title");
+        return initialData.getObject("microformat").getObject("microformatDataRenderer")
+                .getString("title");
     }
 
     @Override
     public String getThumbnailUrl() throws ParsingException {
-        String url = playlistInfo.getObject("thumbnailRenderer").getObject("playlistVideoThumbnailRenderer")
-                .getObject("thumbnail").getArray("thumbnails").getObject(0).getString("url");
+        String url = playlistInfo.getObject("thumbnailRenderer")
+                .getObject("playlistVideoThumbnailRenderer").getObject("thumbnail")
+                .getArray("thumbnails").getObject(0).getString("url");
 
         if (isNullOrEmpty(url)) {
-            url = initialData.getObject("microformat").getObject("microformatDataRenderer").getObject("thumbnail")
-                    .getArray("thumbnails").getObject(0).getString("url");
+            url = initialData.getObject("microformat").getObject("microformatDataRenderer")
+                    .getObject("thumbnail").getArray("thumbnails").getObject(0).getString("url");
 
-            if (isNullOrEmpty(url)) throw new ParsingException("Could not get playlist thumbnail");
+            if (isNullOrEmpty(url)) {
+                throw new ParsingException("Could not get playlist thumbnail");
+            }
         }
 
         return fixThumbnailUrl(url);
@@ -138,7 +152,8 @@ public class YoutubePlaylistExtractor extends PlaylistExtractor {
     @Override
     public String getUploaderAvatarUrl() throws ParsingException {
         try {
-            final String url = getUploaderInfo().getObject("thumbnail").getArray("thumbnails").getObject(0).getString("url");
+            final String url = getUploaderInfo().getObject("thumbnail").getArray("thumbnails")
+                    .getObject(0).getString("url");
 
             return fixThumbnailUrl(url);
         } catch (final Exception e) {
@@ -154,7 +169,8 @@ public class YoutubePlaylistExtractor extends PlaylistExtractor {
     @Override
     public long getStreamCount() throws ParsingException {
         try {
-            final String viewsText = getTextFromObject(getPlaylistInfo().getArray("stats").getObject(0));
+            final String viewsText = getTextFromObject(getPlaylistInfo().getArray("stats")
+                    .getObject(0));
             return Long.parseLong(Utils.removeNonDigitCharacters(viewsText));
         } catch (final Exception e) {
             throw new ParsingException("Could not get video count from playlist", e);
