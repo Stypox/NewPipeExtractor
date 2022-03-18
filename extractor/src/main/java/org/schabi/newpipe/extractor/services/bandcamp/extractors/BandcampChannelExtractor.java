@@ -19,18 +19,23 @@ import org.schabi.newpipe.extractor.stream.StreamInfoItemsCollector;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 public class BandcampChannelExtractor extends ChannelExtractor {
 
     private JsonObject channelInfo;
 
-    public BandcampChannelExtractor(final StreamingService service, final ListLinkHandler linkHandler) {
+    public BandcampChannelExtractor(final StreamingService service,
+                                    final ListLinkHandler linkHandler) {
         super(service, linkHandler);
     }
 
     @Override
     public String getAvatarUrl() {
-        if (channelInfo.getLong("bio_image_id") == 0) return "";
+        if (channelInfo.getLong("bio_image_id") == 0) {
+            return "";
+        }
 
         return BandcampExtractorHelper.getImageUrl(channelInfo.getLong("bio_image_id"), false);
     }
@@ -110,7 +115,9 @@ public class BandcampChannelExtractor extends ChannelExtractor {
             // A discograph is as an item appears in a discography
             final JsonObject discograph = discography.getObject(i);
 
-            if (!discograph.getString("item_type").equals("track")) continue;
+            if (!discograph.getString("item_type").equals("track")) {
+                continue;
+            }
 
             collector.commit(new BandcampDiscographStreamInfoItemExtractor(discograph, getUrl()));
         }
@@ -119,12 +126,13 @@ public class BandcampChannelExtractor extends ChannelExtractor {
     }
 
     @Override
-    public InfoItemsPage<StreamInfoItem> getPage(Page page) {
+    public InfoItemsPage<StreamInfoItem> getPage(final Page page) {
         return null;
     }
 
     @Override
-    public void onFetchPage(@Nonnull Downloader downloader) throws IOException, ExtractionException {
+    public void onFetchPage(@Nonnull final Downloader downloader)
+            throws IOException, ExtractionException {
         channelInfo = BandcampExtractorHelper.getArtistDetails(getId());
     }
 

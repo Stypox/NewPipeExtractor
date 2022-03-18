@@ -26,7 +26,8 @@ import java.util.List;
 
 public class BandcampSearchExtractor extends SearchExtractor {
 
-    public BandcampSearchExtractor(StreamingService service, SearchQueryHandler linkHandler) {
+    public BandcampSearchExtractor(final StreamingService service,
+                                   final SearchQueryHandler linkHandler) {
         super(service, linkHandler);
     }
 
@@ -47,9 +48,8 @@ public class BandcampSearchExtractor extends SearchExtractor {
         return Collections.emptyList();
     }
 
-    public InfoItemsPage<InfoItem> getPage(final Page page) throws IOException, ExtractionException {
-        final String html = getDownloader().get(page.getUrl()).responseBody();
-
+    public InfoItemsPage<InfoItem> getPage(final Page page)
+            throws IOException, ExtractionException {
         final InfoItemsSearchCollector collector = new InfoItemsSearchCollector(getServiceId());
 
 
@@ -86,8 +86,9 @@ public class BandcampSearchExtractor extends SearchExtractor {
 
         // Count pages
         final Elements pageLists = d.getElementsByClass("pagelist");
-        if (pageLists.isEmpty())
+        if (pageLists.isEmpty()) {
             return new InfoItemsPage<>(collector, null);
+        }
 
         final Elements pages = pageLists.first().getElementsByTag("li");
 
@@ -120,7 +121,7 @@ public class BandcampSearchExtractor extends SearchExtractor {
     }
 
     @Override
-    public void onFetchPage(@Nonnull final Downloader downloader) throws IOException, ExtractionException {
-
+    public void onFetchPage(@Nonnull final Downloader downloader)
+            throws IOException, ExtractionException {
     }
 }

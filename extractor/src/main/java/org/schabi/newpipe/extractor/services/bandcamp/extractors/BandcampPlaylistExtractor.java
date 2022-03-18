@@ -27,9 +27,9 @@ import static org.schabi.newpipe.extractor.services.bandcamp.extractors.Bandcamp
 public class BandcampPlaylistExtractor extends PlaylistExtractor {
 
     /**
-     * An arbitrarily chosen number above which cover arts won't be fetched individually for each track;
-     * instead, it will be assumed that every track has the same cover art as the album, which is not
-     * always the case.
+     * An arbitrarily chosen number above which cover arts won't be fetched individually for each
+     * track; instead, it will be assumed that every track has the same cover art as the album,
+     * which is not always the case.
      */
     private static final int MAXIMUM_INDIVIDUAL_COVER_ARTS = 10;
 
@@ -38,12 +38,14 @@ public class BandcampPlaylistExtractor extends PlaylistExtractor {
     private JsonArray trackInfo;
     private String name;
 
-    public BandcampPlaylistExtractor(final StreamingService service, final ListLinkHandler linkHandler) {
+    public BandcampPlaylistExtractor(final StreamingService service,
+                                     final ListLinkHandler linkHandler) {
         super(service, linkHandler);
     }
 
     @Override
-    public void onFetchPage(@Nonnull final Downloader downloader) throws IOException, ExtractionException {
+    public void onFetchPage(@Nonnull final Downloader downloader)
+            throws IOException, ExtractionException {
         final String html = downloader.get(getLinkHandler().getUrl()).responseBody();
         document = Jsoup.parse(html);
         albumJson = getAlbumInfoJson(html);
@@ -56,8 +58,6 @@ public class BandcampPlaylistExtractor extends PlaylistExtractor {
         } catch (final ArrayIndexOutOfBoundsException e) {
             throw new ParsingException("JSON does not exist", e);
         }
-
-
 
         if (trackInfo.size() <= 0) {
             // Albums without trackInfo need to be purchased before they can be played
@@ -135,7 +135,7 @@ public class BandcampPlaylistExtractor extends PlaylistExtractor {
         final StreamInfoItemsCollector collector = new StreamInfoItemsCollector(getServiceId());
 
         for (int i = 0; i < trackInfo.size(); i++) {
-            JsonObject track = trackInfo.getObject(i);
+            final JsonObject track = trackInfo.getObject(i);
 
             if (trackInfo.size() < MAXIMUM_INDIVIDUAL_COVER_ARTS) {
                 // Load cover art of every track individually
@@ -153,7 +153,7 @@ public class BandcampPlaylistExtractor extends PlaylistExtractor {
     }
 
     @Override
-    public InfoItemsPage<StreamInfoItem> getPage(Page page) {
+    public InfoItemsPage<StreamInfoItem> getPage(final Page page) {
         return null;
     }
 
