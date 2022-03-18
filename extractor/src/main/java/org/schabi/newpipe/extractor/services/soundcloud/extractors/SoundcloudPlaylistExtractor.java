@@ -80,7 +80,9 @@ public class SoundcloudPlaylistExtractor extends PlaylistExtractor {
 
                 for (final StreamInfoItem item : infoItems.getItems()) {
                     artworkUrl = item.getThumbnailUrl();
-                    if (!isNullOrEmpty(artworkUrl)) break;
+                    if (!isNullOrEmpty(artworkUrl)) {
+                        break;
+                    }
                 }
             } catch (final Exception ignored) {
             }
