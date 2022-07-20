@@ -1,5 +1,6 @@
 package org.schabi.newpipe.extractor.playlist;
 
+import org.schabi.newpipe.extractor.Image;
 import org.schabi.newpipe.extractor.ListExtractor;
 import org.schabi.newpipe.extractor.StreamingService;
 import org.schabi.newpipe.extractor.exceptions.ParsingException;
@@ -7,6 +8,9 @@ import org.schabi.newpipe.extractor.linkhandler.ListLinkHandler;
 import org.schabi.newpipe.extractor.stream.StreamInfoItem;
 
 import javax.annotation.Nonnull;
+
+import java.util.Collections;
+import java.util.List;
 
 public abstract class PlaylistExtractor extends ListExtractor<StreamInfoItem> {
 
@@ -16,21 +20,20 @@ public abstract class PlaylistExtractor extends ListExtractor<StreamInfoItem> {
 
     public abstract String getUploaderUrl() throws ParsingException;
     public abstract String getUploaderName() throws ParsingException;
-    public abstract String getUploaderAvatarUrl() throws ParsingException;
+    @Nonnull
+    public abstract List<Image> getUploaderAvatars() throws ParsingException;
     public abstract boolean isUploaderVerified() throws ParsingException;
 
     public abstract long getStreamCount() throws ParsingException;
 
     @Nonnull
-    public String getThumbnailUrl() throws ParsingException {
-        return "";
+    public List<Image> getThumbnails() throws ParsingException {
+        return Collections.emptyList();
     }
 
     @Nonnull
-    public String getBannerUrl() throws ParsingException {
-        // Banner can't be handled by frontend right now.
-        // Whoever is willing to implement this should also implement it in the frontend.
-        return "";
+    public List<Image> getBanners() throws ParsingException {
+        return Collections.emptyList();
     }
 
     @Nonnull
@@ -44,8 +47,8 @@ public abstract class PlaylistExtractor extends ListExtractor<StreamInfoItem> {
     }
 
     @Nonnull
-    public String getSubChannelAvatarUrl() throws ParsingException {
-        return "";
+    public List<Image> getSubChannelAvatars() throws ParsingException {
+        return Collections.emptyList();
     }
 
     public PlaylistInfo.PlaylistType getPlaylistType() throws ParsingException {
