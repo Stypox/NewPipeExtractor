@@ -1,5 +1,6 @@
 package org.schabi.newpipe.extractor.playlist;
 
+import org.schabi.newpipe.extractor.Image;
 import org.schabi.newpipe.extractor.ListExtractor.InfoItemsPage;
 import org.schabi.newpipe.extractor.ListInfo;
 import org.schabi.newpipe.extractor.NewPipe;
@@ -11,8 +12,10 @@ import org.schabi.newpipe.extractor.linkhandler.ListLinkHandler;
 import org.schabi.newpipe.extractor.stream.StreamInfoItem;
 import org.schabi.newpipe.extractor.utils.ExtractorHelper;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public final class PlaylistInfo extends ListInfo<StreamInfoItem> {
@@ -103,26 +106,23 @@ public final class PlaylistInfo extends ListInfo<StreamInfoItem> {
             info.addError(e);
         }
         try {
-            info.setThumbnailUrl(extractor.getThumbnailUrl());
+            info.setThumbnails(extractor.getThumbnails());
         } catch (final Exception e) {
             info.addError(e);
         }
         try {
             info.setUploaderUrl(extractor.getUploaderUrl());
         } catch (final Exception e) {
-            info.setUploaderUrl("");
             uploaderParsingErrors.add(e);
         }
         try {
             info.setUploaderName(extractor.getUploaderName());
         } catch (final Exception e) {
-            info.setUploaderName("");
             uploaderParsingErrors.add(e);
         }
         try {
-            info.setUploaderAvatarUrl(extractor.getUploaderAvatarUrl());
+            info.setUploaderAvatars(extractor.getUploaderAvatars());
         } catch (final Exception e) {
-            info.setUploaderAvatarUrl("");
             uploaderParsingErrors.add(e);
         }
         try {
@@ -136,12 +136,12 @@ public final class PlaylistInfo extends ListInfo<StreamInfoItem> {
             uploaderParsingErrors.add(e);
         }
         try {
-            info.setSubChannelAvatarUrl(extractor.getSubChannelAvatarUrl());
+            info.setSubChannelAvatars(extractor.getSubChannelAvatars());
         } catch (final Exception e) {
             uploaderParsingErrors.add(e);
         }
         try {
-            info.setBannerUrl(extractor.getBannerUrl());
+            info.setBanners(extractor.getBanners());
         } catch (final Exception e) {
             info.addError(e);
         }
@@ -165,31 +165,37 @@ public final class PlaylistInfo extends ListInfo<StreamInfoItem> {
         return info;
     }
 
-    private String thumbnailUrl;
-    private String bannerUrl;
-    private String uploaderUrl;
-    private String uploaderName;
-    private String uploaderAvatarUrl;
+    private String uploaderUrl = "";
+    private String uploaderName = "";
     private String subChannelUrl;
     private String subChannelName;
-    private String subChannelAvatarUrl;
-    private long streamCount = 0;
+    @Nonnull
+    private List<Image> banners = Collections.emptyList();
+    @Nonnull
+    private List<Image> subChannelAvatars = Collections.emptyList();
+    @Nonnull
+    private List<Image> thumbnails = Collections.emptyList();
+    @Nonnull
+    private List<Image> uploaderAvatars = Collections.emptyList();
+    private long streamCount;
     private PlaylistType playlistType;
 
-    public String getThumbnailUrl() {
-        return thumbnailUrl;
+    @Nonnull
+    public List<Image> getThumbnails() {
+        return thumbnails;
     }
 
-    public void setThumbnailUrl(final String thumbnailUrl) {
-        this.thumbnailUrl = thumbnailUrl;
+    public void setThumbnails(@Nonnull final List<Image> thumbnails) {
+        this.thumbnails = thumbnails;
     }
 
-    public String getBannerUrl() {
-        return bannerUrl;
+    @Nonnull
+    public List<Image> getBanners() {
+        return banners;
     }
 
-    public void setBannerUrl(final String bannerUrl) {
-        this.bannerUrl = bannerUrl;
+    public void setBanners(@Nonnull final List<Image> banners) {
+        this.banners = banners;
     }
 
     public String getUploaderUrl() {
@@ -208,12 +214,13 @@ public final class PlaylistInfo extends ListInfo<StreamInfoItem> {
         this.uploaderName = uploaderName;
     }
 
-    public String getUploaderAvatarUrl() {
-        return uploaderAvatarUrl;
+    @Nonnull
+    public List<Image> getUploaderAvatars() {
+        return uploaderAvatars;
     }
 
-    public void setUploaderAvatarUrl(final String uploaderAvatarUrl) {
-        this.uploaderAvatarUrl = uploaderAvatarUrl;
+    public void setUploaderAvatars(@Nonnull final List<Image> uploaderAvatars) {
+        this.uploaderAvatars = uploaderAvatars;
     }
 
     public String getSubChannelUrl() {
@@ -232,12 +239,13 @@ public final class PlaylistInfo extends ListInfo<StreamInfoItem> {
         this.subChannelName = subChannelName;
     }
 
-    public String getSubChannelAvatarUrl() {
-        return subChannelAvatarUrl;
+    @Nonnull
+    public List<Image> getSubChannelAvatars() {
+        return subChannelAvatars;
     }
 
-    public void setSubChannelAvatarUrl(final String subChannelAvatarUrl) {
-        this.subChannelAvatarUrl = subChannelAvatarUrl;
+    public void setSubChannelAvatars(@Nonnull final List<Image> subChannelAvatars) {
+        this.subChannelAvatars = subChannelAvatars;
     }
 
     public long getStreamCount() {
