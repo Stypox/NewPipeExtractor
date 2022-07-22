@@ -1,26 +1,3 @@
-package org.schabi.newpipe.extractor.stream;
-
-import org.schabi.newpipe.extractor.Info;
-import org.schabi.newpipe.extractor.InfoItem;
-import org.schabi.newpipe.extractor.MetaInfo;
-import org.schabi.newpipe.extractor.NewPipe;
-import org.schabi.newpipe.extractor.StreamingService;
-import org.schabi.newpipe.extractor.exceptions.ContentNotAvailableException;
-import org.schabi.newpipe.extractor.exceptions.ContentNotSupportedException;
-import org.schabi.newpipe.extractor.exceptions.ExtractionException;
-import org.schabi.newpipe.extractor.localization.DateWrapper;
-import org.schabi.newpipe.extractor.utils.ExtractorHelper;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-
-import javax.annotation.Nonnull;
-
-import static org.schabi.newpipe.extractor.utils.Utils.isNullOrEmpty;
-
 /*
  * Created by Christian Schabesberger on 26.08.15.
  *
@@ -38,8 +15,31 @@ import static org.schabi.newpipe.extractor.utils.Utils.isNullOrEmpty;
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with NewPipe Extractor. If not, see <https://www.gnu.org/licenses/>.
+ * along with NewPipe Extractor.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+package org.schabi.newpipe.extractor.stream;
+
+import org.schabi.newpipe.extractor.Image;
+import org.schabi.newpipe.extractor.Info;
+import org.schabi.newpipe.extractor.InfoItem;
+import org.schabi.newpipe.extractor.MetaInfo;
+import org.schabi.newpipe.extractor.NewPipe;
+import org.schabi.newpipe.extractor.StreamingService;
+import org.schabi.newpipe.extractor.exceptions.ContentNotAvailableException;
+import org.schabi.newpipe.extractor.exceptions.ContentNotSupportedException;
+import org.schabi.newpipe.extractor.exceptions.ExtractionException;
+import org.schabi.newpipe.extractor.localization.DateWrapper;
+import org.schabi.newpipe.extractor.utils.ExtractorHelper;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+
+import javax.annotation.Nonnull;
+
+import static org.schabi.newpipe.extractor.utils.Utils.isNullOrEmpty;
 
 /**
  * Info object for opened contents, i.e. the content ready to play.
@@ -106,9 +106,7 @@ public class StreamInfo extends Info {
         // Important data, without it the content can't be displayed.
         // If one of these is not available, the frontend will receive an exception directly.
 
-        final int serviceId = extractor.getServiceId();
         final String url = extractor.getUrl();
-        final String originalUrl = extractor.getOriginalUrl();
         final StreamType streamType = extractor.getStreamType();
         final String id = extractor.getId();
         final String name = extractor.getName();
@@ -148,7 +146,6 @@ public class StreamInfo extends Info {
             streamInfo.addError(new ExtractionException("Couldn't get HLS manifest", e));
         }
 
-        /* Load and extract audio */
         try {
             streamInfo.setAudioStreams(extractor.getAudioStreams());
         } catch (final ContentNotSupportedException e) {
@@ -157,29 +154,16 @@ public class StreamInfo extends Info {
             streamInfo.addError(new ExtractionException("Couldn't get audio streams", e));
         }
 
-        /* Extract video stream url */
         try {
             streamInfo.setVideoStreams(extractor.getVideoStreams());
         } catch (final Exception e) {
             streamInfo.addError(new ExtractionException("Couldn't get video streams", e));
         }
 
-        /* Extract video only stream url */
         try {
             streamInfo.setVideoOnlyStreams(extractor.getVideoOnlyStreams());
         } catch (final Exception e) {
             streamInfo.addError(new ExtractionException("Couldn't get video only streams", e));
-        }
-
-        // Lists can be null if an exception was thrown during extraction
-        if (streamInfo.getVideoStreams() == null) {
-            streamInfo.setVideoStreams(Collections.emptyList());
-        }
-        if (streamInfo.getVideoOnlyStreams() == null) {
-            streamInfo.setVideoOnlyStreams(Collections.emptyList());
-        }
-        if (streamInfo.getAudioStreams() == null) {
-            streamInfo.setAudioStreams(Collections.emptyList());
         }
 
         // Either audio or video has to be available, otherwise we didn't get a stream (since
@@ -199,7 +183,7 @@ public class StreamInfo extends Info {
         // so the frontend can afterwards check where errors happened.
 
         try {
-            streamInfo.setThumbnailUrl(extractor.getThumbnailUrl());
+            streamInfo.setThumbnails(extractor.getThumbnails());
         } catch (final Exception e) {
             streamInfo.addError(e);
         }
@@ -219,7 +203,7 @@ public class StreamInfo extends Info {
             streamInfo.addError(e);
         }
         try {
-            streamInfo.setUploaderAvatarUrl(extractor.getUploaderAvatarUrl());
+            streamInfo.setUploaderAvatars(extractor.getUploaderAvatars());
         } catch (final Exception e) {
             streamInfo.addError(e);
         }
@@ -245,7 +229,7 @@ public class StreamInfo extends Info {
             streamInfo.addError(e);
         }
         try {
-            streamInfo.setSubChannelAvatarUrl(extractor.getSubChannelAvatarUrl());
+            streamInfo.setSubChannelAvatars(extractor.getSubChannelAvatars());
         } catch (final Exception e) {
             streamInfo.addError(e);
         }
@@ -353,7 +337,8 @@ public class StreamInfo extends Info {
     }
 
     private StreamType streamType;
-    private String thumbnailUrl = "";
+    @Nonnull
+    private List<Image> thumbnails = Collections.emptyList();
     private String textualUploadDate;
     private DateWrapper uploadDate;
     private long duration = -1;
@@ -366,24 +351,26 @@ public class StreamInfo extends Info {
 
     private String uploaderName = "";
     private String uploaderUrl = "";
-    private String uploaderAvatarUrl = "";
+    @Nonnull
+    private List<Image> uploaderAvatars = Collections.emptyList();
     private boolean uploaderVerified = false;
     private long uploaderSubscriberCount = -1;
 
     private String subChannelName = "";
     private String subChannelUrl = "";
-    private String subChannelAvatarUrl = "";
+    @Nonnull
+    private List<Image> subChannelAvatars = Collections.emptyList();
 
-    private List<VideoStream> videoStreams = new ArrayList<>();
-    private List<AudioStream> audioStreams = new ArrayList<>();
-    private List<VideoStream> videoOnlyStreams = new ArrayList<>();
+    private List<VideoStream> videoStreams = Collections.emptyList();
+    private List<AudioStream> audioStreams = Collections.emptyList();
+    private List<VideoStream> videoOnlyStreams = Collections.emptyList();
 
     private String dashMpdUrl = "";
     private String hlsUrl = "";
-    private List<InfoItem> relatedItems = new ArrayList<>();
+    private List<InfoItem> relatedItems = Collections.emptyList();
 
     private long startPosition = 0;
-    private List<SubtitlesStream> subtitles = new ArrayList<>();
+    private List<SubtitlesStream> subtitles = Collections.emptyList();
 
     private String host = "";
     private StreamExtractor.Privacy privacy;
@@ -391,9 +378,9 @@ public class StreamInfo extends Info {
     private String licence = "";
     private String supportInfo = "";
     private Locale language = null;
-    private List<String> tags = new ArrayList<>();
-    private List<StreamSegment> streamSegments = new ArrayList<>();
-    private List<MetaInfo> metaInfo = new ArrayList<>();
+    private List<String> tags = Collections.emptyList();
+    private List<StreamSegment> streamSegments = Collections.emptyList();
+    private List<MetaInfo> metaInfo = Collections.emptyList();
     private boolean shortFormContent = false;
 
     /**
@@ -419,12 +406,13 @@ public class StreamInfo extends Info {
      *
      * @return the thumbnail url as a string
      */
-    public String getThumbnailUrl() {
-        return thumbnailUrl;
+    @Nonnull
+    public List<Image> getThumbnails() {
+        return thumbnails;
     }
 
-    public void setThumbnailUrl(final String thumbnailUrl) {
-        this.thumbnailUrl = thumbnailUrl;
+    public void setThumbnails(@Nonnull final List<Image> thumbnails) {
+        this.thumbnails = thumbnails;
     }
 
     public String getTextualUploadDate() {
@@ -522,12 +510,13 @@ public class StreamInfo extends Info {
         this.uploaderUrl = uploaderUrl;
     }
 
-    public String getUploaderAvatarUrl() {
-        return uploaderAvatarUrl;
+    @Nonnull
+    public List<Image> getUploaderAvatars() {
+        return uploaderAvatars;
     }
 
-    public void setUploaderAvatarUrl(final String uploaderAvatarUrl) {
-        this.uploaderAvatarUrl = uploaderAvatarUrl;
+    public void setUploaderAvatars(@Nonnull final List<Image> uploaderAvatars) {
+        this.uploaderAvatars = uploaderAvatars;
     }
 
     public boolean isUploaderVerified() {
@@ -562,12 +551,13 @@ public class StreamInfo extends Info {
         this.subChannelUrl = subChannelUrl;
     }
 
-    public String getSubChannelAvatarUrl() {
-        return subChannelAvatarUrl;
+    @Nonnull
+    public List<Image> getSubChannelAvatars() {
+        return subChannelAvatars;
     }
 
-    public void setSubChannelAvatarUrl(final String subChannelAvatarUrl) {
-        this.subChannelAvatarUrl = subChannelAvatarUrl;
+    public void setSubChannelAvatars(@Nonnull final List<Image> subChannelAvatars) {
+        this.subChannelAvatars = subChannelAvatars;
     }
 
     public List<VideoStream> getVideoStreams() {
