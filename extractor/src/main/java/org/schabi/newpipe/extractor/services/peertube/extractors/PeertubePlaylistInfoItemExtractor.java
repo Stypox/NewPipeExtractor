@@ -2,16 +2,20 @@ package org.schabi.newpipe.extractor.services.peertube.extractors;
 
 import com.grack.nanojson.JsonObject;
 
+import org.schabi.newpipe.extractor.Image;
 import org.schabi.newpipe.extractor.exceptions.ParsingException;
 import org.schabi.newpipe.extractor.playlist.PlaylistInfoItemExtractor;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 
-public class PeertubePlaylistInfoItemExtractor implements PlaylistInfoItemExtractor  {
+import static org.schabi.newpipe.extractor.services.peertube.PeertubeParsingHelper.getThumbnailsFromPlaylistOrVideoItem;
 
-    final JsonObject item;
-    final JsonObject uploader;
-    final String baseUrl;
+public class PeertubePlaylistInfoItemExtractor implements PlaylistInfoItemExtractor {
+
+    private final JsonObject item;
+    private final JsonObject uploader;
+    private final String baseUrl;
 
     public PeertubePlaylistInfoItemExtractor(@Nonnull final JsonObject item,
                                              @Nonnull final String baseUrl) {
@@ -30,9 +34,10 @@ public class PeertubePlaylistInfoItemExtractor implements PlaylistInfoItemExtrac
         return item.getString("url");
     }
 
+    @Nonnull
     @Override
-    public String getThumbnailUrl() throws ParsingException {
-        return baseUrl + item.getString("thumbnailPath");
+    public List<Image> getThumbnails() throws ParsingException {
+        return getThumbnailsFromPlaylistOrVideoItem(baseUrl, item);
     }
 
     @Override
