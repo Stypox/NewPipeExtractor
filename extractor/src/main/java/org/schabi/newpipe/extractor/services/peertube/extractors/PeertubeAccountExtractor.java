@@ -4,6 +4,7 @@ import com.grack.nanojson.JsonArray;
 import com.grack.nanojson.JsonObject;
 import com.grack.nanojson.JsonParser;
 import com.grack.nanojson.JsonParserException;
+import org.schabi.newpipe.extractor.Image;
 import org.schabi.newpipe.extractor.Page;
 import org.schabi.newpipe.extractor.StreamingService;
 import org.schabi.newpipe.extractor.channel.ChannelExtractor;
@@ -23,11 +24,15 @@ import org.schabi.newpipe.extractor.utils.Utils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 import static org.schabi.newpipe.extractor.services.peertube.PeertubeParsingHelper.COUNT_KEY;
 import static org.schabi.newpipe.extractor.services.peertube.PeertubeParsingHelper.ITEMS_PER_PAGE;
 import static org.schabi.newpipe.extractor.services.peertube.PeertubeParsingHelper.START_KEY;
 import static org.schabi.newpipe.extractor.services.peertube.PeertubeParsingHelper.collectStreamsFrom;
+import static org.schabi.newpipe.extractor.services.peertube.PeertubeParsingHelper.getAvatarsFromOwnerAccountOrVideoChannelObject;
+import static org.schabi.newpipe.extractor.services.peertube.PeertubeParsingHelper.getBannersFromAccountOrVideoChannelObject;
 import static org.schabi.newpipe.extractor.utils.Utils.isNullOrEmpty;
 
 public class PeertubeAccountExtractor extends ChannelExtractor {
@@ -41,20 +46,16 @@ public class PeertubeAccountExtractor extends ChannelExtractor {
         this.baseUrl = getBaseUrl();
     }
 
+    @Nonnull
     @Override
-    public String getAvatarUrl() {
-        String value;
-        try {
-            value = JsonUtils.getString(json, "avatar.path");
-        } catch (final Exception e) {
-            value = "/client/assets/images/default-avatar.png";
-        }
-        return baseUrl + value;
+    public List<Image> getAvatars() {
+        return getAvatarsFromOwnerAccountOrVideoChannelObject(baseUrl, json);
     }
 
+    @Nonnull
     @Override
-    public String getBannerUrl() {
-        return null;
+    public List<Image> getBanners() {
+        return getBannersFromAccountOrVideoChannelObject(baseUrl, json);
     }
 
     @Override
@@ -107,9 +108,10 @@ public class PeertubeAccountExtractor extends ChannelExtractor {
         return "";
     }
 
+    @Nonnull
     @Override
-    public String getParentChannelAvatarUrl() {
-        return "";
+    public List<Image> getParentChannelAvatars() {
+        return Collections.emptyList();
     }
 
     @Override
