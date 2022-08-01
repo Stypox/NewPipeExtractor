@@ -1,15 +1,16 @@
 package org.schabi.newpipe.extractor.services;
 
+@SuppressWarnings("unused")
 public interface BaseStreamExtractorTest extends BaseExtractorTest {
     void testStreamType() throws Exception;
     void testUploaderName() throws Exception;
     void testUploaderUrl() throws Exception;
-    void testUploaderAvatarUrl() throws Exception;
+    void testUploaderAvatars() throws Exception;
     void testSubscriberCount() throws Exception;
     void testSubChannelName() throws Exception;
     void testSubChannelUrl() throws Exception;
-    void testSubChannelAvatarUrl() throws Exception;
-    void testThumbnailUrl() throws Exception;
+    void testSubChannelAvatars() throws Exception;
+    void testThumbnails() throws Exception;
     void testDescription() throws Exception;
     void testLength() throws Exception;
     void testTimestamp() throws Exception;
