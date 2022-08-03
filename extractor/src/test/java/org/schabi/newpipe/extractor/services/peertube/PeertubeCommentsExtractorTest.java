@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.schabi.newpipe.extractor.ServiceList.PeerTube;
+import static org.schabi.newpipe.extractor.services.DefaultTests.defaultTestImageCollection;
 
 public class PeertubeCommentsExtractorTest {
     public static class Default {
@@ -69,21 +70,19 @@ public class PeertubeCommentsExtractorTest {
 
         @Test
         void testGetCommentsAllData() throws IOException, ExtractionException {
-            extractor.getInitialPage()
-                    .getItems()
-                    .forEach(commentsInfoItem -> {
-                        assertFalse(Utils.isBlank(commentsInfoItem.getUploaderUrl()));
-                        assertFalse(Utils.isBlank(commentsInfoItem.getUploaderName()));
-                        assertFalse(Utils.isBlank(commentsInfoItem.getUploaderAvatarUrl()));
-                        assertFalse(Utils.isBlank(commentsInfoItem.getCommentId()));
-                        assertFalse(Utils.isBlank(commentsInfoItem.getCommentText().getContent()));
-                        assertFalse(Utils.isBlank(commentsInfoItem.getName()));
-                        assertFalse(Utils.isBlank(commentsInfoItem.getTextualUploadDate()));
-                        assertFalse(Utils.isBlank(commentsInfoItem.getThumbnailUrl()));
-                        assertFalse(Utils.isBlank(commentsInfoItem.getUrl()));
-                        assertEquals(-1, commentsInfoItem.getLikeCount());
-                        assertTrue(Utils.isBlank(commentsInfoItem.getTextualLikeCount()));
-                    });
+            for (final CommentsInfoItem c : extractor.getInitialPage().getItems()) {
+                assertFalse(Utils.isBlank(c.getUploaderUrl()));
+                assertFalse(Utils.isBlank(c.getUploaderName()));
+                defaultTestImageCollection(c.getUploaderAvatars());
+                assertFalse(Utils.isBlank(c.getCommentId()));
+                assertFalse(Utils.isBlank(c.getCommentText().getContent()));
+                assertFalse(Utils.isBlank(c.getName()));
+                assertFalse(Utils.isBlank(c.getTextualUploadDate()));
+                defaultTestImageCollection(c.getThumbnails());
+                assertFalse(Utils.isBlank(c.getUrl()));
+                assertEquals(-1, c.getLikeCount());
+                assertTrue(Utils.isBlank(c.getTextualLikeCount()));
+            }
         }
 
         private boolean findInComments(final InfoItemsPage<CommentsInfoItem> comments,
@@ -94,8 +93,7 @@ public class PeertubeCommentsExtractorTest {
         private boolean findInComments(final List<CommentsInfoItem> comments,
                                        final String comment) {
             return comments.stream()
-                    .anyMatch(commentsInfoItem ->
-                            commentsInfoItem.getCommentText().getContent().contains(comment));
+                    .anyMatch(c -> c.getCommentText().getContent().contains(comment));
         }
     }
 
