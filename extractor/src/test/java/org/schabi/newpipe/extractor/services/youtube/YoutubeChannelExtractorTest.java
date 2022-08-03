@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.schabi.newpipe.extractor.ExtractorAsserts.assertContains;
-import static org.schabi.newpipe.extractor.ExtractorAsserts.assertIsSecureUrl;
+import static org.schabi.newpipe.extractor.ExtractorAsserts.assertEmpty;
 import static org.schabi.newpipe.extractor.ServiceList.YouTube;
 import static org.schabi.newpipe.extractor.services.DefaultTests.defaultTestGetPageInNewExtractor;
 import static org.schabi.newpipe.extractor.services.DefaultTests.defaultTestMoreItems;
@@ -212,17 +212,13 @@ public class YoutubeChannelExtractorTest {
         }
 
         @Test
-        public void testAvatarUrl() throws Exception {
-            String avatarUrl = extractor.getAvatarUrl();
-            assertIsSecureUrl(avatarUrl);
-            ExtractorAsserts.assertContains("yt3", avatarUrl);
+        public void testAvatars() throws Exception {
+            YoutubeTestsUtils.testImages(extractor.getAvatars());
         }
 
         @Test
-        public void testBannerUrl() throws Exception {
-            String bannerUrl = extractor.getBannerUrl();
-            assertIsSecureUrl(bannerUrl);
-            ExtractorAsserts.assertContains("yt3", bannerUrl);
+        public void testBanners() throws Exception {
+            YoutubeTestsUtils.testImages(extractor.getBanners());
         }
 
         @Test
@@ -235,6 +231,7 @@ public class YoutubeChannelExtractorTest {
             ExtractorAsserts.assertGreaterOrEqual(4_900_000, extractor.getSubscriberCount());
         }
 
+        @Test
         @Override
         public void testVerified() throws Exception {
             assertTrue(extractor.isVerified());
@@ -242,7 +239,7 @@ public class YoutubeChannelExtractorTest {
 
     }
 
-    // Youtube RED/Premium ad blocking test
+    // YouTube RED/Premium ad blocking test
     public static class VSauce implements BaseChannelExtractorTest {
         private static YoutubeChannelExtractor extractor;
 
@@ -308,17 +305,13 @@ public class YoutubeChannelExtractorTest {
         }
 
         @Test
-        public void testAvatarUrl() throws Exception {
-            String avatarUrl = extractor.getAvatarUrl();
-            assertIsSecureUrl(avatarUrl);
-            ExtractorAsserts.assertContains("yt3", avatarUrl);
+        public void testAvatars() throws Exception {
+            YoutubeTestsUtils.testImages(extractor.getAvatars());
         }
 
         @Test
-        public void testBannerUrl() throws Exception {
-            String bannerUrl = extractor.getBannerUrl();
-            assertIsSecureUrl(bannerUrl);
-            ExtractorAsserts.assertContains("yt3", bannerUrl);
+        public void testBanners() throws Exception {
+            YoutubeTestsUtils.testImages(extractor.getBanners());
         }
 
         @Test
@@ -406,17 +399,13 @@ public class YoutubeChannelExtractorTest {
         }
 
         @Test
-        public void testAvatarUrl() throws Exception {
-            String avatarUrl = extractor.getAvatarUrl();
-            assertIsSecureUrl(avatarUrl);
-            ExtractorAsserts.assertContains("yt3", avatarUrl);
+        public void testAvatars() throws Exception {
+            YoutubeTestsUtils.testImages(extractor.getAvatars());
         }
 
         @Test
-        public void testBannerUrl() throws Exception {
-            String bannerUrl = extractor.getBannerUrl();
-            assertIsSecureUrl(bannerUrl);
-            ExtractorAsserts.assertContains("yt3", bannerUrl);
+        public void testBanners() throws Exception {
+            YoutubeTestsUtils.testImages(extractor.getBanners());
         }
 
         @Test
@@ -520,17 +509,13 @@ public class YoutubeChannelExtractorTest {
         }
 
         @Test
-        public void testAvatarUrl() throws Exception {
-            String avatarUrl = extractor.getAvatarUrl();
-            assertIsSecureUrl(avatarUrl);
-            ExtractorAsserts.assertContains("yt3", avatarUrl);
+        public void testAvatars() throws Exception {
+            YoutubeTestsUtils.testImages(extractor.getAvatars());
         }
 
         @Test
-        public void testBannerUrl() throws Exception {
-            String bannerUrl = extractor.getBannerUrl();
-            assertIsSecureUrl(bannerUrl);
-            ExtractorAsserts.assertContains("yt3", bannerUrl);
+        public void testBanners() throws Exception {
+            YoutubeTestsUtils.testImages(extractor.getBanners());
         }
 
         @Test
@@ -620,17 +605,13 @@ public class YoutubeChannelExtractorTest {
         }
 
         @Test
-        public void testAvatarUrl() throws Exception {
-            String avatarUrl = extractor.getAvatarUrl();
-            assertIsSecureUrl(avatarUrl);
-            ExtractorAsserts.assertContains("yt3", avatarUrl);
+        public void testAvatars() throws Exception {
+            YoutubeTestsUtils.testImages(extractor.getAvatars());
         }
 
         @Test
-        public void testBannerUrl() throws Exception {
-            String bannerUrl = extractor.getBannerUrl();
-            assertIsSecureUrl(bannerUrl);
-            ExtractorAsserts.assertContains("yt3", bannerUrl);
+        public void testBanners() throws Exception {
+            YoutubeTestsUtils.testImages(extractor.getBanners());
         }
 
         @Test
@@ -672,7 +653,7 @@ public class YoutubeChannelExtractorTest {
 
         @Test
         public void testName() throws Exception {
-            assertEquals(extractor.getName(), "Coachella");
+            assertEquals("Coachella", extractor.getName());
         }
 
         @Test
@@ -704,23 +685,22 @@ public class YoutubeChannelExtractorTest {
             defaultTestMoreItems(extractor);
         }
 
-         /*//////////////////////////////////////////////////////////////////////////
-         // ChannelExtractor
-         //////////////////////////////////////////////////////////////////////////*/
-         @Override
-         public void testDescription() {
-         }
-
-        @Test
-        public void testAvatarUrl() throws Exception {
-            String avatarUrl = extractor.getAvatarUrl();
-            assertIsSecureUrl(avatarUrl);
-            ExtractorAsserts.assertContains("yt3", avatarUrl);
+        /*//////////////////////////////////////////////////////////////////////////
+        // ChannelExtractor
+        //////////////////////////////////////////////////////////////////////////*/
+        @Override
+        public void testDescription() {
         }
 
         @Test
-        public void testBannerUrl() throws Exception {
+        public void testAvatars() throws Exception {
+            YoutubeTestsUtils.testImages(extractor.getAvatars());
+        }
+
+        @Test
+        public void testBanners() throws Exception {
             // CarouselHeaderRender does not contain a banner
+            assertEmpty(extractor.getBanners());
         }
 
         @Test

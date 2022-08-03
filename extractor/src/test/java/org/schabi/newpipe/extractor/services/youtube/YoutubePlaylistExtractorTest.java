@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.schabi.newpipe.extractor.ExtractorAsserts.assertContains;
-import static org.schabi.newpipe.extractor.ExtractorAsserts.assertIsSecureUrl;
 import static org.schabi.newpipe.extractor.ServiceList.YouTube;
 import static org.schabi.newpipe.extractor.services.DefaultTests.assertNoMoreItems;
 import static org.schabi.newpipe.extractor.services.DefaultTests.defaultTestGetPageInNewExtractor;
@@ -120,22 +119,17 @@ public class YoutubePlaylistExtractorTest {
         //////////////////////////////////////////////////////////////////////////*/
 
         @Test
-        public void testThumbnailUrl() throws Exception {
-            final String thumbnailUrl = extractor.getThumbnailUrl();
-            assertIsSecureUrl(thumbnailUrl);
-            ExtractorAsserts.assertContains("yt", thumbnailUrl);
-        }
-
-        @Disabled
-        @Test
-        public void testBannerUrl() throws ParsingException {
-            final String bannerUrl = extractor.getBannerUrl();
-            assertIsSecureUrl(bannerUrl);
-            ExtractorAsserts.assertContains("yt", bannerUrl);
+        public void testThumbnails() throws Exception {
+            YoutubeTestsUtils.testImages(extractor.getThumbnails());
         }
 
         @Test
-        public void testUploaderUrl() throws Exception {
+        public void testBanners() throws ParsingException {
+            YoutubeTestsUtils.testImages(extractor.getBanners());
+        }
+
+        @Test
+        void testUploaderUrl() throws Exception {
             assertEquals("https://www.youtube.com/channel/UCs72iRpTEuwV3y6pdWYLgiw", extractor.getUploaderUrl());
         }
 
@@ -146,9 +140,8 @@ public class YoutubePlaylistExtractorTest {
         }
 
         @Test
-        public void testUploaderAvatarUrl() throws Exception {
-            final String uploaderAvatarUrl = extractor.getUploaderAvatarUrl();
-            ExtractorAsserts.assertContains("yt", uploaderAvatarUrl);
+        public void testUploaderAvatars() throws Exception {
+            YoutubeTestsUtils.testImages(extractor.getUploaderAvatars());
         }
 
         @Test
@@ -156,6 +149,7 @@ public class YoutubePlaylistExtractorTest {
             ExtractorAsserts.assertGreater(100, extractor.getStreamCount());
         }
 
+        @Test
         @Override
         public void testUploaderVerified() throws Exception {
             assertFalse(extractor.isUploaderVerified());
@@ -190,7 +184,7 @@ public class YoutubePlaylistExtractorTest {
         //////////////////////////////////////////////////////////////////////////*/
 
         @Test
-        public void testGetPageInNewExtractor() throws Exception {
+        void testGetPageInNewExtractor() throws Exception {
             final PlaylistExtractor newExtractor = YouTube.getPlaylistExtractor(extractor.getUrl());
             defaultTestGetPageInNewExtractor(extractor, newExtractor);
         }
@@ -250,22 +244,17 @@ public class YoutubePlaylistExtractorTest {
         //////////////////////////////////////////////////////////////////////////*/
 
         @Test
-        public void testThumbnailUrl() throws Exception {
-            final String thumbnailUrl = extractor.getThumbnailUrl();
-            assertIsSecureUrl(thumbnailUrl);
-            ExtractorAsserts.assertContains("yt", thumbnailUrl);
-        }
-
-        @Disabled
-        @Test
-        public void testBannerUrl() throws ParsingException {
-            final String bannerUrl = extractor.getBannerUrl();
-            assertIsSecureUrl(bannerUrl);
-            ExtractorAsserts.assertContains("yt", bannerUrl);
+        public void testThumbnails() throws Exception {
+            YoutubeTestsUtils.testImages(extractor.getThumbnails());
         }
 
         @Test
-        public void testUploaderUrl() throws Exception {
+        public void testBanners() throws ParsingException {
+            YoutubeTestsUtils.testImages(extractor.getBanners());
+        }
+
+        @Test
+        void testUploaderUrl() throws Exception {
             assertEquals("https://www.youtube.com/channel/UCHSPWoY1J5fbDVbcnyeqwdw", extractor.getUploaderUrl());
         }
 
@@ -275,9 +264,8 @@ public class YoutubePlaylistExtractorTest {
         }
 
         @Test
-        public void testUploaderAvatarUrl() throws Exception {
-            final String uploaderAvatarUrl = extractor.getUploaderAvatarUrl();
-            ExtractorAsserts.assertContains("yt", uploaderAvatarUrl);
+        public void testUploaderAvatars() throws Exception {
+            YoutubeTestsUtils.testImages(extractor.getUploaderAvatars());
         }
 
         @Test
@@ -285,9 +273,10 @@ public class YoutubePlaylistExtractorTest {
             ExtractorAsserts.assertGreater(100, extractor.getStreamCount());
         }
 
+        @Test
         @Override
         public void testUploaderVerified() throws Exception {
-            assertTrue(extractor.isUploaderVerified());
+            assertFalse(extractor.isUploaderVerified());
         }
 
         @Test
@@ -363,22 +352,17 @@ public class YoutubePlaylistExtractorTest {
         //////////////////////////////////////////////////////////////////////////*/
 
         @Test
-        public void testThumbnailUrl() throws Exception {
-            final String thumbnailUrl = extractor.getThumbnailUrl();
-            assertIsSecureUrl(thumbnailUrl);
-            ExtractorAsserts.assertContains("yt", thumbnailUrl);
-        }
-
-        @Disabled
-        @Test
-        public void testBannerUrl() throws ParsingException {
-            final String bannerUrl = extractor.getBannerUrl();
-            assertIsSecureUrl(bannerUrl);
-            ExtractorAsserts.assertContains("yt", bannerUrl);
+        public void testThumbnails() throws Exception {
+            YoutubeTestsUtils.testImages(extractor.getThumbnails());
         }
 
         @Test
-        public void testUploaderUrl() throws Exception {
+        public void testBanners() throws ParsingException {
+            YoutubeTestsUtils.testImages(extractor.getBanners());
+        }
+
+        @Test
+        void testUploaderUrl() throws Exception {
             assertEquals("https://www.youtube.com/channel/UCX6b17PVsYBQ0ip5gyeme-Q", extractor.getUploaderUrl());
         }
 
@@ -389,9 +373,8 @@ public class YoutubePlaylistExtractorTest {
         }
 
         @Test
-        public void testUploaderAvatarUrl() throws Exception {
-            final String uploaderAvatarUrl = extractor.getUploaderAvatarUrl();
-            ExtractorAsserts.assertContains("yt", uploaderAvatarUrl);
+        public void testUploaderAvatars() throws Exception {
+            YoutubeTestsUtils.testImages(extractor.getUploaderAvatars());
         }
 
         @Test
@@ -399,9 +382,10 @@ public class YoutubePlaylistExtractorTest {
             ExtractorAsserts.assertGreater(40, extractor.getStreamCount());
         }
 
+        @Test
         @Override
         public void testUploaderVerified() throws Exception {
-            assertTrue(extractor.isUploaderVerified());
+            assertFalse(extractor.isUploaderVerified());
         }
 
         @Test
@@ -425,7 +409,7 @@ public class YoutubePlaylistExtractorTest {
         }
 
         @Test
-        public void testNoContinuations() throws Exception {
+        void testNoContinuations() throws Exception {
             final YoutubePlaylistExtractor extractor = (YoutubePlaylistExtractor) YouTube
                     .getPlaylistExtractor(
                             "https://www.youtube.com/playlist?list=PLXJg25X-OulsVsnvZ7RVtSDW-id9_RzAO");
@@ -435,7 +419,7 @@ public class YoutubePlaylistExtractorTest {
         }
 
         @Test
-        public void testOnlySingleContinuation() throws Exception {
+        void testOnlySingleContinuation() throws Exception {
             final YoutubePlaylistExtractor extractor = (YoutubePlaylistExtractor) YouTube
                     .getPlaylistExtractor(
                             "https://www.youtube.com/playlist?list=PLoumn5BIsUDeGF1vy5Nylf_RJKn5aL_nr");
