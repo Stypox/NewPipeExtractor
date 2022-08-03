@@ -14,9 +14,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.schabi.newpipe.extractor.ExtractorAsserts.assertIsSecureUrl;
+import static org.schabi.newpipe.extractor.ExtractorAsserts.assertEmpty;
 import static org.schabi.newpipe.extractor.ServiceList.PeerTube;
 import static org.schabi.newpipe.extractor.services.DefaultTests.defaultTestGetPageInNewExtractor;
+import static org.schabi.newpipe.extractor.services.DefaultTests.defaultTestImageCollection;
 import static org.schabi.newpipe.extractor.services.DefaultTests.defaultTestMoreItems;
 import static org.schabi.newpipe.extractor.services.DefaultTests.defaultTestRelatedItems;
 
@@ -91,13 +92,13 @@ public class PeertubeAccountExtractorTest {
         }
 
         @Test
-        public void testAvatarUrl() throws ParsingException {
-            assertIsSecureUrl(extractor.getAvatarUrl());
+        public void testAvatars() {
+            defaultTestImageCollection(extractor.getAvatars());
         }
 
         @Test
-        public void testBannerUrl() {
-            assertNull(extractor.getBannerUrl());
+        public void testBanners() {
+            assertEmpty(extractor.getBanners());
         }
 
         @Test
@@ -110,6 +111,7 @@ public class PeertubeAccountExtractorTest {
             ExtractorAsserts.assertGreaterOrEqual(700, extractor.getSubscriberCount());
         }
 
+        @Test
         @Override
         public void testVerified() throws Exception {
             assertFalse(extractor.isVerified());
@@ -134,7 +136,7 @@ public class PeertubeAccountExtractorTest {
         //////////////////////////////////////////////////////////////////////////*/
 
         @Test
-        public void testGetPageInNewExtractor() throws Exception {
+        void testGetPageInNewExtractor() throws Exception {
             final ChannelExtractor newExtractor = PeerTube.getChannelExtractor(extractor.getUrl());
             defaultTestGetPageInNewExtractor(extractor, newExtractor);
         }
@@ -187,18 +189,18 @@ public class PeertubeAccountExtractorTest {
         //////////////////////////////////////////////////////////////////////////*/
 
         @Test
-        public void testDescription() throws ParsingException {
+        public void testDescription() {
             assertNotNull(extractor.getDescription());
         }
 
         @Test
-        public void testAvatarUrl() throws ParsingException {
-            assertIsSecureUrl(extractor.getAvatarUrl());
+        public void testAvatars() {
+            defaultTestImageCollection(extractor.getAvatars());
         }
 
         @Test
-        public void testBannerUrl() throws ParsingException {
-            assertNull(extractor.getBannerUrl());
+        public void testBanners() {
+            assertEmpty(extractor.getBanners());
         }
 
         @Test
@@ -211,6 +213,7 @@ public class PeertubeAccountExtractorTest {
             ExtractorAsserts.assertGreaterOrEqual(100, extractor.getSubscriberCount());
         }
 
+        @Test
         @Override
         public void testVerified() throws Exception {
             assertFalse(extractor.isVerified());
