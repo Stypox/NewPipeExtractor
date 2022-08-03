@@ -7,12 +7,11 @@ import org.junit.jupiter.api.Test;
 import org.schabi.newpipe.downloader.DownloaderTestImpl;
 import org.schabi.newpipe.extractor.NewPipe;
 import org.schabi.newpipe.extractor.channel.ChannelExtractor;
-import org.schabi.newpipe.extractor.exceptions.ExtractionException;
 import org.schabi.newpipe.extractor.services.BaseChannelExtractorTest;
 
-import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.schabi.newpipe.extractor.ServiceList.Bandcamp;
 
 public class BandcampChannelExtractorTest implements BaseChannelExtractorTest {
@@ -27,71 +26,78 @@ public class BandcampChannelExtractorTest implements BaseChannelExtractorTest {
     }
 
     @Test
-    public void testLength() throws ExtractionException, IOException {
-        assertTrue(extractor.getInitialPage().getItems().size() >= 0);
-    }
-
     @Override
-    @Test
     public void testDescription() throws Exception {
         assertEquals("making music:)", extractor.getDescription());
     }
 
+    @Test
     @Override
-    public void testAvatarUrl() throws Exception {
-        assertTrue(extractor.getAvatarUrl().contains("://f4.bcbits.com/"), "unexpected avatar URL");
+    public void testAvatars() throws Exception {
+        BandcampTestUtils.testImages(extractor.getAvatars());
     }
 
+    @Test
     @Override
-    public void testBannerUrl() throws Exception {
-        assertTrue(extractor.getBannerUrl().contains("://f4.bcbits.com/"), "unexpected banner URL");
+    public void testBanners() throws Exception {
+        BandcampTestUtils.testImages(extractor.getBanners());
     }
 
+    @Test
     @Override
     public void testFeedUrl() throws Exception {
         assertNull(extractor.getFeedUrl());
     }
 
+    @Test
     @Override
     public void testSubscriberCount() throws Exception {
         assertEquals(-1, extractor.getSubscriberCount());
     }
 
+    @Test
     @Override
     public void testVerified() throws Exception {
         assertFalse(extractor.isVerified());
     }
 
+    @Test
     @Override
     public void testRelatedItems() throws Exception {
         // not implemented
     }
 
+    @Test
     @Override
     public void testMoreRelatedItems() throws Exception {
         // not implemented
     }
 
+    @Test
     @Override
     public void testServiceId() {
         assertEquals(Bandcamp.getServiceId(), extractor.getServiceId());
     }
 
+    @Test
     @Override
     public void testName() throws Exception {
         assertEquals("toupie", extractor.getName());
     }
 
+    @Test
     @Override
     public void testId() throws Exception {
-        assertEquals("https://toupie.bandcamp.com/", extractor.getId());
+        assertEquals("2450875064", extractor.getId());
     }
 
+    @Test
     @Override
     public void testUrl() throws Exception {
         assertEquals("https://toupie.bandcamp.com", extractor.getUrl());
     }
 
+    @Test
     @Override
     public void testOriginalUrl() throws Exception {
         assertEquals("https://toupie.bandcamp.com", extractor.getUrl());
