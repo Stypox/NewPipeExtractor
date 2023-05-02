@@ -1,13 +1,16 @@
 package org.schabi.newpipe.extractor.services.youtube;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.schabi.newpipe.extractor.ExtractorAsserts.assertContains;
+import static org.schabi.newpipe.extractor.ExtractorAsserts.assertEmpty;
 import static org.schabi.newpipe.extractor.ServiceList.YouTube;
 import static org.schabi.newpipe.extractor.services.DefaultTests.defaultTestGetPageInNewExtractor;
+import static org.schabi.newpipe.extractor.services.DefaultTests.defaultTestImageCollection;
 import static org.schabi.newpipe.extractor.services.DefaultTests.defaultTestMoreItems;
 import static org.schabi.newpipe.extractor.services.DefaultTests.defaultTestRelatedItems;
 
@@ -684,23 +687,26 @@ public class YoutubeChannelExtractorTest {
             defaultTestMoreItems(extractor);
         }
 
-         /*//////////////////////////////////////////////////////////////////////////
-         // ChannelExtractor
-         //////////////////////////////////////////////////////////////////////////*/
-         @Override
-         public void testDescription() {
-         }
-
-        @Test
-        public void testAvatarUrl() throws Exception {
-            String avatarUrl = extractor.getAvatarUrl();
-            assertIsSecureUrl(avatarUrl);
-            ExtractorAsserts.assertContains("yt3", avatarUrl);
+        /*//////////////////////////////////////////////////////////////////////////
+        // ChannelExtractor
+        //////////////////////////////////////////////////////////////////////////*/
+        @Override
+        public void testDescription() {
         }
 
         @Test
-        public void testBannerUrl() throws Exception {
+        @Override
+        public void testAvatars() throws Exception {
+            defaultTestImageCollection(extractor.getAvatars());
+            assertAll(extractor.getAvatars().stream()
+                    .map(a -> () -> assertContains("yt3", a.getUrl())));
+        }
+
+        @Test
+        @Override
+        public void testBanners() throws Exception {
             // CarouselHeaderRender does not contain a banner
+            assertEmpty(extractor.getBanners());
         }
 
         @Test
