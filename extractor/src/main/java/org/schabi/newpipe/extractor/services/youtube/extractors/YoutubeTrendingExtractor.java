@@ -45,6 +45,9 @@ import java.nio.charset.StandardCharsets;
 import javax.annotation.Nonnull;
 
 public class YoutubeTrendingExtractor extends KioskExtractor<StreamInfoItem> {
+
+    public static final String KIOSK_ID = "Trending";
+
     private JsonObject initialData;
 
     public YoutubeTrendingExtractor(final StreamingService service,
